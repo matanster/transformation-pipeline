@@ -1,5 +1,5 @@
 # the linguistic database - don't trust github with it for now
-ldb/
+data/
 
 # vertx
 vert.x-2.1.1/
