@@ -22,22 +22,33 @@ object Boot extends App {
 
   Monitor
 
-  def writeOutputFile(fileText: String, fileName: String, outDir: String) {
+  def writeOutputFile(fileText: String, outDir: String, fileName: String) {
     Files.write(Paths.get(outDir + "/" + fileName), fileText.getBytes(StandardCharsets.UTF_8))
   }
 
-  def applyXSL(fileText: String) {
+  def XSL(fileText: String) : String = {
     val xslSources   = "xsl"
     val opener       = """<?xml version="1.0" encoding="UTF-8"?>"""
     val xslEmbedding = """<?xml-stylesheet type="text/xsl" href="jats-html.xsl"?>"""
     val docTypeDef   = """<!DOCTYPE article PUBLIC "-//NLM//DTD Journal Archiving and Interchange DTD v3.0 20080202//EN" "archivearticle3.dtd">"""
-    val modified     = fileText.replace(docTypeDef, "").replace(opener, opener + "\n" + xslEmbedding)
+    val modified     = fileText.replace(docTypeDef, xslEmbedding) // the first is not needed and makes Chrome abort, 
+                                                                  // the second gives us a nice display transform for the xml
+    return modified
   }
 
-  val sourceDirName = "elife-articles(XML)"
-  case class Step(from: String, to: String)
-  val steps: Seq[Step] = Seq(Step("input", "formatted"),
-                             Step("formatted", "styled"))
+  type Transformation = (String, String, String) => Unit
+
+  def applyXSL(sourceDirName: String, targetDirName: String, fileName: String) {
+    writeOutputFile(XSL(Source.fromFile(s"$sourceDirName/$fileName").mkString), targetDirName, fileName)
+  }
+
+  def prettify(sourceDirName: String, targetDirName: String, fileName: String) {
+    (s"xmllint --format $sourceDirName/$fileName" #> new File(s"$targetDirName/$fileName")).!
+  }
+
+  case class Step(from: String, to: String, transformation:Transformation)
+  val steps: Seq[Step] = Seq(Step("input", "formatted", prettify),
+                             Step("formatted", "styled", applyXSL))
   
   def based(dir: String) = "data" + "/" + dir
 
@@ -54,26 +65,22 @@ object Boot extends App {
   steps.foreach(createDir)
 
   def StepDo(step: Step) {
+    // see http://www.scala-lang.org/api/current/index.html#scala.sys.process.package for the way this invokes an OS command
     val sourceDirName = based(step.from)
     val sourceDir = new File(based(step.from))
     val targetDirName = based(step.to)
-    println(sourceDirName)
+
     val files = sourceDir.listFiles.filter(file => (file.isFile && file.getName.endsWith(".xml")))
 
     // running concurrently via .par - scala will employ some parallelism by multithreding, matching the number of free cores
-    // see http://www.scala-lang.org/api/current/index.html#scala.sys.process.package for the way this invokes an OS command
     files.par.foreach (file => {
-      val fileName = {file.getName}
-      (s"xmllint --format $sourceDirName/$fileName" #> new File(s"$targetDirName/$fileName")).!
+      val fileName = file.getName
+      step.transformation(sourceDirName, targetDirName, fileName)
     })
-
-    val nextStageFiles = files map (file => s"$targetDirName/${file.getName}")
   }
 
-
   try {
-    StepDo(steps.head)
-    //nextStageFiles.par.foreach (fileName => writeOutputFile(applyXSL(Source.fromFile(fileName).mkString)), fileName, steps(1))
+    steps foreach StepDo
 
     } finally {
         Monitor.shutdown
