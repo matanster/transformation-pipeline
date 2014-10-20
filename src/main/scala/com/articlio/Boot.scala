@@ -29,6 +29,7 @@ object Boot extends App {
     val files = sourceDir.listFiles.filter(file => (file.isFile && file.getName.endsWith(".xml")))
 
     // running concurrently via .par - scala will employ some parallelism by multithreding, matching the number of free cores
+    // see http://www.scala-lang.org/api/current/index.html#scala.sys.process.package for the way this invokes an OS command
     files.par.foreach (file => (s"xmllint --format $sourceDirName/${file.getName}" #> new File(s"$targetDirName/${file.getName}")).!)
 
     } finally {
