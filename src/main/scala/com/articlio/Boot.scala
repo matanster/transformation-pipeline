@@ -4,7 +4,7 @@ import com.articlio.steps.util.{copy, writeOutputFile}
 import java.io.{File}
 import sys.process._ // for being able to issue OS commands
 
-object JATSpipeline {
+class JATSpipeline {
 
   def XSL(fileText: String) : String = {
     val xslSources   = "xsl"
@@ -42,7 +42,7 @@ object Boot extends App {
 
   try {
 
-    JATSpipeline
+    val pipeline = new JATSpipeline
 
     } finally {
         Monitor.shutdown

@@ -37,7 +37,7 @@ case class Step(from: String,
                 transformation: (String, String, String) => Unit, 
                 initializer: (String) => Unit)
 
-case class Pipeline(steps: Seq[Step]) {
+class Pipeline(steps: Seq[Step]) {
   
   import util._
 
@@ -63,7 +63,7 @@ case class Pipeline(steps: Seq[Step]) {
     step.initializer(step.to)
 
     // running concurrently via .par - scala will employ some parallelism by multithreding, matching the number of free cores
-    files.foreach (file => {
+    files.par.foreach (file => {
       val fileName = file.getName
       step.transformation(sourceDirName, targetDirName, fileName)
     })
