@@ -25,7 +25,7 @@ class JATSpipeline {
     (s"xmllint --format $sourceDirName/$fileName" #> new File(s"$targetDirName/$fileName")).!
   }
 
-  def copyXSL(to: String) = copy("xsl/*", to)
+  def copyXSL(to: String) = copy("xsl/*", to) // the xsl and css were taken from https://github.com/ncbi/JATSPreviewStylesheets
 
   def nullInitializer (s: String) = {}
 

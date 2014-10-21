@@ -27,7 +27,7 @@ package object util {
   def based(dir: String) = "data" + "/" + dir
 
   def copy(patternOrFile: String, to: String) {
-    Seq("bash", "-c", s"cp $patternOrFile ${based(to)}").! // bash is needed for expanding the * before calling ls, ls alone doesn't do it.
+    //Seq("bash", "-c", s"cp $patternOrFile ${based(to)}").!! // bash is needed for expanding the * before calling ls, ls alone doesn't do it.
   }
 
 }
