@@ -4,6 +4,7 @@ import com.articlio.steps.util.{copy, writeOutputFile}
 import java.io.{File}
 import sys.process._ // for being able to issue OS commands
 
+// TODO: refactor to use one function that runs a modifier function and writes its output to file
 class JATSpipeline {
 
   def XSL(fileText: String) : String = {
@@ -15,7 +16,20 @@ class JATSpipeline {
                                                                   // the second gives us a nice display transform for the xml
     return modified
   }
+  
+  def clean(fileText: String) : String = {
+    val xmlns = """xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" """
+    val docTypeDef   = """<!DOCTYPE article PUBLIC "-//NLM//DTD Journal Archiving and Interchange DTD v3.0 20080202//EN" "archivearticle3.dtd">"""
+    val modified     = fileText.replace(docTypeDef, "").replace(xmlns, "") 
+                                                                  // the second gives us a nice display transform for the xml
+    return modified
+  }
 
+  def applyClean(sourceDirName: String, targetDirName: String, fileName: String) {
+    import scala.io.Source
+    writeOutputFile(clean(Source.fromFile(s"$sourceDirName/$fileName").mkString), targetDirName, fileName)
+  }
+  
   def applyXSL(sourceDirName: String, targetDirName: String, fileName: String) {
     import scala.io.Source
     writeOutputFile(XSL(Source.fromFile(s"$sourceDirName/$fileName").mkString), targetDirName, fileName)
@@ -29,8 +43,12 @@ class JATSpipeline {
 
   def nullInitializer (s: String) = {}
 
-  val steps: Seq[Step] = Seq(Step("input", "formatted", prettify, nullInitializer),
-                             Step("formatted", "styled", applyXSL, copyXSL))
+  //val steps: Seq[Step] = Seq(Step("input", "formatted", prettify, nullInitializer),
+  //                          Step("formatted", "styled", applyXSL, copyXSL))
+    
+  val steps: Seq[Step] = Seq(Step("input-eLife", "formatted", prettify, nullInitializer),
+                   Step("formatted", "styled", applyXSL, copyXSL),
+                   Step("input", "prep", applyClean, nullInitializer))
 
   val pipeline = new Pipeline(steps) 
 

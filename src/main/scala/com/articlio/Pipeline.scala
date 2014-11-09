@@ -27,7 +27,7 @@ package object util {
   def based(dir: String) = "data" + "/" + dir
 
   def copy(patternOrFile: String, to: String) {
-    //Seq("bash", "-c", s"cp $patternOrFile ${based(to)}").!! // bash is needed for expanding the * before calling ls, ls alone doesn't do it.
+     Seq("bash", "-c", s"cp $patternOrFile ${based(to)}").!! // bash is needed for expanding the * before calling ls, ls alone doesn't do it.
   }
 
 }
@@ -58,7 +58,7 @@ class Pipeline(steps: Seq[Step]) {
     val sourceDir = new File(based(step.from))
     val targetDirName = based(step.to)
 
-    val files = sourceDir.listFiles.filter(file => (file.isFile && file.getName.endsWith(".xml")))
+    val files = sourceDir.listFiles.filter(file => (file.isFile)) // && file.getName.endsWith(".xml")))
 
     step.initializer(step.to)
 
