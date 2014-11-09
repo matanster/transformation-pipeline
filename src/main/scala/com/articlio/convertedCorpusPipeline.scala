@@ -18,7 +18,7 @@ class ConvertedCorpusPipeline {
   }
   
   def XMLescape(fileText: String) : String = {
-    val modified     = fileText.replace("&","&amp").replace("<", "&lt").replace(">", "&gt").replace("\"", "&quot").replace("'", "&apos")
+    val modified     = fileText.replace("&","&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;")
    return modified
   }
 
