@@ -42,7 +42,7 @@ class Pipeline(steps: Seq[Step]) {
   import util._
 
   //
-  // take care of a ready empty target directory for a step
+  // take care of a ready empty target subfolder for a step - prefix path must already exist
   //
   def createDir(step: Step) = {
     val targetDirName: String = step.to 
@@ -51,7 +51,24 @@ class Pipeline(steps: Seq[Step]) {
     Files.createDirectory(targetDirObj)
   }
 
-
+  //
+  // take care of a ready target path for a step
+  //
+  def createDirRecursive(step: Step) = {
+    val targetDirName: String = step.to 
+    
+    def impl(path: String) {
+      val folderObj = Paths.get(based(path))
+      if (!Files.exists(folderObj)) {
+      val (prefix, last) = path.splitAt(path.lastIndexOf('/'))
+      impl(prefix)
+      Files.createDirectory(folderObj)
+      } 
+    }
+    
+    impl(targetDirName)
+  }
+  
   def StepDo(step: Step) {
     // see http://www.scala-lang.org/api/current/index.html#scala.sys.process.package for the way this invokes an OS command
     val sourceDirName = based(step.from)
@@ -69,7 +86,7 @@ class Pipeline(steps: Seq[Step]) {
     })
   }
 
-  steps.foreach(createDir)
+  steps.foreach(createDirRecursive)
   steps foreach StepDo
 
 }

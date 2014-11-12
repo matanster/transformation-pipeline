@@ -18,13 +18,18 @@ class ConvertedCorpusPipeline {
   }
   
   def XMLescape(fileText: String) : String = {
-    val modified     = fileText.replace("&","&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;")
+    val modified  = fileText.replace("&","&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;")
    return modified
   }
-
+  
+  def toJatsNaive(fileText: String) : String = {
+    val modified  = """<?xml version="1.0" encoding="UTF-8"?><article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML"><body><sec sec-type="intro" id="s1"><title>Introduction</title><p>"""  + fileText +  "</p></sec></body></article>"
+   return modified
+  }
+  
   def writer(sourceDirName: String, targetDirName: String, fileName: String, f: String => String) {
     import scala.io.Source
-    writeOutputFile(XMLescape(Source.fromFile(s"$sourceDirName/$fileName").mkString), targetDirName, fileName)
+    writeOutputFile(f(Source.fromFile(s"$sourceDirName/$fileName").mkString), targetDirName, fileName)
   }
       
  def HTMLescape(sourceDirName: String, targetDirName: String, fileName: String) {
@@ -34,7 +39,8 @@ class ConvertedCorpusPipeline {
 
   def nullInitializer (s: String) = {}
 
-  val steps: Seq[Step] = Seq(Step("input-converted-corpus", "toJATS", writer(_:String, _:String, _:String, XMLescape), nullInitializer)) // switch from this partial application technique, to currying or other nicer functional design
+  val steps: Seq[Step] = Seq(Step("input-raw/converted-to-JATS", "input-intermediary/converted-to-JATS/escaped", writer(_:String, _:String, _:String, XMLescape), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
+                                                Step("input-intermediary/converted-to-JATS/escaped", "ready-for-semantic/converted-to-JATS", writer(_:String, _:String, _:String, toJatsNaive), nullInitializer))
 
   val pipeline = new Pipeline(steps) 
 

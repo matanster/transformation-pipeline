@@ -46,9 +46,9 @@ class JATSpipeline {
   //val steps: Seq[Step] = Seq(Step("input", "formatted", prettify, nullInitializer),
   //                          Step("formatted", "styled", applyXSL, copyXSL))
     
-  val steps: Seq[Step] = Seq(Step("input-eLife", "formatted", prettify, nullInitializer),
-                   Step("formatted", "styled", applyXSL, copyXSL),
-                   Step("input", "prep", applyClean, nullInitializer))
+  val steps: Seq[Step] = Seq(Step("input-raw/eLife-JATS", "input-intermediary/eLife-JATS/formatted", prettify, nullInitializer),
+                   Step("input-intermediary/eLife-JATS/formatted", "input-intermediary/eLife-JATS/styled", applyXSL, copyXSL),
+                   Step("input-raw/eLife-JATS", "ready-for-semantic/eLife-JATS", applyClean, nullInitializer))
 
   val pipeline = new Pipeline(steps) 
 
