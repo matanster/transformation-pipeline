@@ -17,11 +17,15 @@ class ConvertedCorpusPipeline {
     return modified
   }
   
+  def stripArtificialNewLine(fileText: String) : String = fileText.filter(_ != '\n')
+  
   def XMLescape(fileText: String) : String = {
     val modified  = fileText.replace("&","&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;")
    return modified
   }
-  
+
+  def clean(fileText: String) : String = XMLescape(stripArtificialNewLine(fileText))
+      
   def toJatsNaive(fileText: String) : String = {
     val modified  = """<?xml version="1.0" encoding="UTF-8"?><article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML"><body><sec sec-type="intro" id="s1"><title>Introduction</title><p>"""  + fileText +  "</p></sec></body></article>"
    return modified
@@ -39,7 +43,7 @@ class ConvertedCorpusPipeline {
 
   def nullInitializer (s: String) = {}
 
-  val steps: Seq[Step] = Seq(Step("input-raw/converted-to-JATS", "input-intermediary/converted-to-JATS/escaped", writer(_:String, _:String, _:String, XMLescape), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
+  val steps: Seq[Step] = Seq(Step("input-raw/converted-to-JATS/as-text", "input-intermediary/converted-to-JATS/escaped", writer(_:String, _:String, _:String, clean), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
                                                 Step("input-intermediary/converted-to-JATS/escaped", "ready-for-semantic/converted-to-JATS", writer(_:String, _:String, _:String, toJatsNaive), nullInitializer))
 
   val pipeline = new Pipeline(steps) 
