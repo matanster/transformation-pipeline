@@ -43,8 +43,10 @@ class ConvertedCorpusPipeline {
 
   def nullInitializer (s: String) = {}
 
-  val steps: Seq[Step] = Seq(Step("input-raw/converted-to-JATS/as-text", "input-intermediary/converted-to-JATS/escaped", writer(_:String, _:String, _:String, clean), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
-                                                Step("input-intermediary/converted-to-JATS/escaped", "ready-for-semantic/converted-to-JATS", writer(_:String, _:String, _:String, toJatsNaive), nullInitializer))
+  val base = "pdf/"
+  
+  val steps: Seq[Step] = Seq(Step(base + "2-as-text", base + "3-escaped", writer(_:String, _:String, _:String, clean), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
+                                                Step(base + "3-escaped", "ready-for-semantic/from-pdf", writer(_:String, _:String, _:String, toJatsNaive), nullInitializer))
 
   val pipeline = new Pipeline(steps) 
 
