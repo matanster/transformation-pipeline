@@ -27,7 +27,7 @@ class ConvertedCorpusPipeline {
   def clean(fileText: String) : String = XMLescape(stripArtificialNewLine(fileText))
       
   def toJatsNaive(fileText: String) : String = {
-    val modified  = """<?xml version="1.0" encoding="UTF-8"?><article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML"><body><sec sec-type="intro" id="s1"><title>Introduction</title><p>"""  + fileText +  "</p></sec></body></article>"
+    val modified  = """<?xml version="1.0" encoding="UTF-8"?><article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML"><body><sec sec-type="introduction" id="s1"><title>Introduction</title><p>"""  + fileText +  "</p></sec></body></article>"
    return modified
   }
   
