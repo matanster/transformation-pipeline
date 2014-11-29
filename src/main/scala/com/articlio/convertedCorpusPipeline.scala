@@ -45,8 +45,10 @@ class ConvertedCorpusPipeline {
 
   val base = "pdf/"
   
-  val steps: Seq[Step] = Seq(Step(base + "2-as-text", base + "3-escaped", writer(_:String, _:String, _:String, clean), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
+  val fromTextSentencesFile: Seq[Step] = Seq(Step(base + "2-as-text", base + "3-escaped", writer(_:String, _:String, _:String, clean), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
                                                 Step(base + "3-escaped", "ready-for-semantic/from-pdf", writer(_:String, _:String, _:String, toJatsNaive), nullInitializer))
+
+  val steps: Seq[Step] = Seq(Step(base + "2-as-JATS", "ready-for-semantic/from-pdf", writer(_:String, _:String, _:String, identity), nullInitializer))
 
   val pipeline = new Pipeline(steps) 
 

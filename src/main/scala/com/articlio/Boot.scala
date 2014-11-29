@@ -7,8 +7,8 @@ object Boot extends App {
 
   try {
 
-    val eLifePipeline = new JATSpipeline
-    val PDFconvertedPipeline = new ConvertedCorpusPipeline
+    val eLifeJATSpipeline = new JATSpipeline
+    val PDFpipeline = new ConvertedCorpusPipeline
 
     } finally {
         Monitor.shutdown
