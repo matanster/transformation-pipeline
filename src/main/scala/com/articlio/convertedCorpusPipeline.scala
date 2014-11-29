@@ -1,5 +1,5 @@
 package com.articlio.steps
-
+import com.articlio.config
 import com.articlio.steps.util.{copy, writeOutputFile}
 import java.io.{File}
 import sys.process._ // for being able to issue OS commands
@@ -45,10 +45,10 @@ class ConvertedCorpusPipeline {
 
   val base = "pdf/"
   
-  val fromTextSentencesFile: Seq[Step] = Seq(Step(base + "2-as-text", base + "3-escaped", writer(_:String, _:String, _:String, clean), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
-                                                Step(base + "3-escaped", "ready-for-semantic/from-pdf", writer(_:String, _:String, _:String, toJatsNaive), nullInitializer))
+  val fromTextSentencesFile: Seq[Step] = Seq(Step(config.asText, config.asEscapedText, writer(_:String, _:String, _:String, clean), nullInitializer), // for more beautyful code switch from this partial application technique, to currying or other nicer functional design
+                                                Step(config.asEscapedText, config.copyTo, writer(_:String, _:String, _:String, toJatsNaive), nullInitializer))
 
-  val steps: Seq[Step] = Seq(Step(base + "2-as-JATS", "ready-for-semantic/from-pdf", writer(_:String, _:String, _:String, identity), nullInitializer))
+  val steps: Seq[Step] = Seq(Step(config.pdfAsJATS, config.copyTo, writer(_:String, _:String, _:String, identity), nullInitializer))
 
   val pipeline = new Pipeline(steps) 
 

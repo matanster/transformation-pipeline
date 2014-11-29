@@ -1,6 +1,7 @@
 package com.articlio.steps
 
 import com.articlio.steps.util.{copy, writeOutputFile}
+import com.articlio.config
 import java.io.{File}
 import sys.process._ // for being able to issue OS commands
 
@@ -46,11 +47,9 @@ class JATSpipeline {
   //val steps: Seq[Step] = Seq(Step("input", "formatted", prettify, nullInitializer),
   //                          Step("formatted", "styled", applyXSL, copyXSL))
     
-  val base = "eLife-JATS/"
-  
-  val steps: Seq[Step] = Seq(Step(base + "0-input", base + "1-formatted", prettify, nullInitializer),
-                   Step(base + "1-formatted", base + "2-styled", applyXSL, copyXSL),
-                   Step(base + "0-input", "ready-for-semantic/from-eLife", applyClean, nullInitializer))
+  val steps: Seq[Step] = Seq(Step(config.JATSinput, config.JATSformatted, prettify, nullInitializer),
+                   Step(config.JATSformatted, config.JATSstyled, applyXSL, copyXSL),
+                   Step(config.JATSinput, config.JATSout, applyClean, nullInitializer))
 
   val pipeline = new Pipeline(steps) 
 
