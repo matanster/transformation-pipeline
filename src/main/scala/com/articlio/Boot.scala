@@ -12,5 +12,5 @@ object Boot extends App {
 
     } finally {
         Monitor.shutdown
-      }
+    }
 }

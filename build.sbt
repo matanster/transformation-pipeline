@@ -21,9 +21,14 @@ libraryDependencies ++= {
     "io.spray"            %   "spray-testkit" % sprayV  % "test",
     "com.typesafe.akka"   %%  "akka-actor"    % akkaV,
     "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test",
-    "org.specs2"          %%  "specs2-core"   % "2.3.7" % "test"
+    "org.specs2"          %%  "specs2-core"   % "2.3.7" % "test" 
   )
 }
+
+//
+// SistaNLP
+//
+libraryDependencies += "edu.arizona.sista" % "processors" % "3.3"
 
 seq(SbtStartScript.startScriptForClassesSettings: _*)
 
