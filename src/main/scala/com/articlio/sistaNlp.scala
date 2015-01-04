@@ -1,11 +1,11 @@
 package com.articlio.sistaNlp
 import edu.arizona.sista.processors._
 import edu.arizona.sista.processors.corenlp.CoreNLPProcessor
-import edu.arizona.sista.discourse.rstparser.RelationDirection
 import edu.arizona.sista.struct.DirectedGraphEdgeIterator
+//import edu.arizona.sista.discourse.rstparser.RelationDirection
 
 class sistaNlp {
-    // create the processor
+  // create the processor
   // any processor works here! Try FastNLPProcessor or BioNLPProcessor.
   val proc:Processor = new CoreNLPProcessor(withDiscourse = true)
   

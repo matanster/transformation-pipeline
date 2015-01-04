@@ -8,7 +8,13 @@ version       := "0.1"
 // akka & spray
 //
 
-scalaVersion  := "2.10.3"
+scalaVersion  := "2.10.4"
+
+scalacOptions += "-target:jvm-1.6"
+
+//scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation")
+
+javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
@@ -28,7 +34,12 @@ libraryDependencies ++= {
 //
 // SistaNLP
 //
-libraryDependencies += "edu.arizona.sista" % "processors" % "3.3"
+libraryDependencies ++= {
+  //val version = "4.0-SNAPSHOT"
+  val version = "3.3"
+  Seq("edu.arizona.sista" % "processors" % version,
+      "edu.arizona.sista" % "processors" % version classifier "models")
+}
 
 seq(SbtStartScript.startScriptForClassesSettings: _*)
 
@@ -77,3 +88,7 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "latest.release"
 resolvers += "Sonatype releases" at "http://oss.sonatype.org/content/repositories/releases/"
 
 libraryDependencies += "com.github.verbalexpressions" %% "scalaverbalexpression" % "1.0.1"
+
+unmanagedClasspath in Test += baseDirectory.value / ""
+
+unmanagedClasspath in (Compile, runMain) += baseDirectory.value / "special-resources"

@@ -7,9 +7,12 @@ object Boot extends App {
 
   try {
 
-    val eLifeJATSpipeline = new JATSpipeline
-    val PDFpipeline = new ConvertedCorpusPipeline
+    //val eLifeJATSpipeline = new JATSpipeline
+    //val PDFpipeline = new ConvertedCorpusPipeline
 
+    import com.articlio.sistaNlp._
+    val a = new sistaNlp
+    
     } finally {
         Monitor.shutdown
     }
