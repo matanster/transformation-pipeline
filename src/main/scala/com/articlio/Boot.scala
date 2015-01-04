@@ -14,7 +14,11 @@ object Boot extends App {
      *
      * import com.articlio.sistaNlp._
      * val a = new sistaNlp
-     * 
+     *
+     * To extend use of NLP tools through it, confer to:
+     *   https://github.com/sistanlp/processors#annotating-entire-documents
+     *   https://github.com/sistanlp/processors#annotating-documents-already-split-into-sentences
+     *   https://github.com/sistanlp/processors#using-individual-annotators  
      */
     
     } finally {
