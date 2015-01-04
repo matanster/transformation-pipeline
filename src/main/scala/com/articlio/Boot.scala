@@ -19,6 +19,7 @@ object Boot extends App {
      *   https://github.com/sistanlp/processors#annotating-entire-documents
      *   https://github.com/sistanlp/processors#annotating-documents-already-split-into-sentences
      *   https://github.com/sistanlp/processors#using-individual-annotators  
+     *   http://nlp.stanford.edu/software/corenlp.shtml (CoreNLP full range of annotators; midway downpage)
      */
     
     } finally {
