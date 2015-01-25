@@ -51,6 +51,6 @@ class ConvertedCorpusPipeline {
   val steps: Seq[Step] = Seq(Step(config.pdfAsJATS, config.copyTo, writer(_:String, _:String, _:String, identity), nullInitializer))
 
   val pipeline = new Pipeline(steps) 
-  println("pipeline invoked for pdf converted input")
 
+  println("pipeline invoked for pdf converted input")
 }

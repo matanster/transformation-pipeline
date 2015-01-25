@@ -1,14 +1,14 @@
 import com.articlio.selfMonitor.{Monitor}
 import com.articlio.steps._
+import com.articlio.HttpService
 
 object Boot extends App {
 
   Monitor
 
-  try {
+  val httpService = HttpService
 
-    val eLifeJATSpipeline = new JATSpipeline
-    val PDFpipeline = new ConvertedCorpusPipeline
+  try {
 
     /* uncomment to use sistaNLP, when you have ~4GB free RAM for it to bootstrap
      *
