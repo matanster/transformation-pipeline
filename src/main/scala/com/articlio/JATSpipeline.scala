@@ -53,4 +53,5 @@ class JATSpipeline {
 
   val pipeline = new Pipeline(steps) 
 
+  println("pipeline invoked for originally JATS input")
 }
