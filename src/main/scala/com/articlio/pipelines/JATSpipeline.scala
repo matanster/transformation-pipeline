@@ -1,9 +1,12 @@
-package com.articlio.steps
+package com.articlio.pipelines
 
 import com.articlio.steps.util.{copy, writeOutputFile}
 import com.articlio.config
 import java.io.{File}
-import sys.process._ // for being able to issue OS commands
+import sys.process._
+import com.articlio.steps.BulkPipeline
+import com.articlio.steps.Step
+import scala.io.Source
 
 // TODO: refactor to use one function that runs a modifier function and writes its output to file
 class JATSpipeline {
@@ -51,7 +54,7 @@ class JATSpipeline {
                    Step(config.JATSformatted, config.JATSstyled, applyXSL, copyXSL),
                    Step(config.JATSinput, config.JATSout, applyClean, nullInitializer))
 
-  val pipeline = new Pipeline(steps) 
+  val pipeline = new BulkPipeline(steps) 
 
   println("pipeline invoked for originally JATS input")
 }

@@ -37,7 +37,7 @@ case class Step(from: String,
                 transformation: (String, String, String) => Unit, 
                 initializer: (String) => Unit)
 
-class Pipeline(steps: Seq[Step]) {
+class BulkPipeline(steps: Seq[Step]) {
   
   import util._
 

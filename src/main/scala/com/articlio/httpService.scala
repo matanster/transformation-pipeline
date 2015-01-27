@@ -15,6 +15,7 @@ import spray.http._
 import MediaTypes._
 import scala.concurrent.duration._
 import com.articlio.steps._
+import com.articlio.pipelines._
 
 class MyServiceActor extends Actor with MyService {
 

@@ -1,8 +1,11 @@
-package com.articlio.steps
+package com.articlio.pipelines
 import com.articlio.config
-import com.articlio.steps.util.{copy, writeOutputFile}
+import com.articlio.steps.util.writeOutputFile
 import java.io.{File}
-import sys.process._ // for being able to issue OS commands
+import sys.process._
+import com.articlio.steps.BulkPipeline
+import com.articlio.steps.Step
+import scala.io.Source
 
 // TODO: refactor to use one function that runs a modifier function and writes its output to file
 class ConvertedCorpusPipeline {
@@ -50,7 +53,7 @@ class ConvertedCorpusPipeline {
 
   val steps: Seq[Step] = Seq(Step(config.pdfAsJATS, config.copyTo, writer(_:String, _:String, _:String, identity), nullInitializer))
 
-  val pipeline = new Pipeline(steps) 
+  val pipeline = new BulkPipeline(steps) 
 
   println("pipeline invoked for pdf converted input")
 }
