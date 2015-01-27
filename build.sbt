@@ -2,6 +2,8 @@ import com.typesafe.sbt.SbtStartScript
 
 organization  := "com.articlio"
 
+name          := "transformation pipeline"
+
 version       := "0.1"
 
 //
@@ -92,3 +94,19 @@ libraryDependencies += "com.github.verbalexpressions" %% "scalaverbalexpression"
 unmanagedClasspath in Test += baseDirectory.value / ""
 
 unmanagedClasspath in (Compile, runMain) += baseDirectory.value / "special-resources"
+
+//
+// build info stuff - adds build version info as scala code available to the application :)
+//
+
+buildInfoSettings
+
+sourceGenerators in Compile <+= buildInfo
+
+buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, buildInfoBuildNumber)
+
+buildInfoPackage := "buildVersioning"
+
+buildInfoObject  := "Info"
+
+EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Managed

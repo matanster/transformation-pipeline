@@ -30,29 +30,26 @@ class MyServiceActor extends Actor with MyService {
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
-
+  
   val myRoute =
     get {
 	  path("") { 
-		complete {
-          <html>
-            <body>
-              <h1>service is up</h1>
-            </body>
-          </html>
+  		complete {
+          //<html><body><h1>{buildVersioning.Info.name} service is up</h1></body></html>
+          "${buildVersioning.Info.name} service is up"
         }
+    } ~
+    path("filesTransformer") {
+      parameter('all) { _ =>
+        val eLifeJATSpipeline = new JATSpipeline
+        val PDFpipeline = new ConvertedCorpusPipeline
+    	  complete("Done transforming input files")
       } ~
-      path("filesTransformer") {
-        parameter('all) { _ =>
-          val eLifeJATSpipeline = new JATSpipeline
-          val PDFpipeline = new ConvertedCorpusPipeline
-      	  complete("Done transforming input files")
-        } ~
-        parameter('inputFile) { inputFile =>
-          complete("Processing single input file not implemented yet")
-        }
+      parameter('inputFile) { inputFile =>
+        complete("Processing single input file not implemented yet")
       }
     }
+  }
 }
 
 object HttpService {

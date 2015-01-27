@@ -4,6 +4,8 @@ import com.articlio.HttpService
 
 object Boot extends App {
 
+  println(s"starting project ${buildVersioning.Info.name}")
+  
   Monitor
 
   val httpService = HttpService
